@@ -1,17 +1,19 @@
+
+
 from relationship_app.models import Author, Book, Library, Librarian
 
-# 1. Query all books by a specific author
+# 1. Query all books by a specific author (using filter)
 def get_books_by_author(author_name):
     try:
         author = Author.objects.get(name=author_name)
-        books = author.books.all()
+        books = Book.objects.filter(author=author)  # Explicit filter
         print(f"\nBooks by {author.name}:")
         for book in books:
             print(f"- {book.title}")
     except Author.DoesNotExist:
         print(f"No author found with name '{author_name}'")
 
-# 2. List all books in a specific library
+# 2. List all books in a library
 def get_books_in_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
@@ -26,7 +28,7 @@ def get_books_in_library(library_name):
 def get_librarian_of_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
-        librarian = library.librarian  # Uses related_name
+        librarian = library.librarian  # OneToOne relation
         print(f"\nLibrarian of {library.name} Library: {librarian.name}")
     except Library.DoesNotExist:
         print(f"No library found with name '{library_name}'")
@@ -35,7 +37,6 @@ def get_librarian_of_library(library_name):
 
 # --------- Run Examples ---------
 if __name__ == "__main__":
-    # Replace these names with actual values from your DB
     get_books_by_author("George Orwell")
     get_books_in_library("Central Library")
     get_librarian_of_library("Central Library")
