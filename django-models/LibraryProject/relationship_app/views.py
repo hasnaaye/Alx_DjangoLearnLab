@@ -7,6 +7,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponse
 
 def book_list(request):
       """Retrieves all books and renders a template displaying the list."""
@@ -40,3 +42,31 @@ class register(CreateView):
 class LoginView(LoginView):
    template_name = 'relationship_app/login.html'
    redirect_authenticated_user = True
+
+
+
+def is_admin(user):
+    return hasattr(user, 'profile') and user.profile.role == 'Admin'
+
+@user_passes_test(is_admin)
+def admin_dashboard(request):
+    return HttpResponse("Welcome, Admin! This is the admin view.")
+
+
+
+def is_librarian(user):
+   return hasattr(user, 'profile') and user.profile.role == "librarian"
+
+@user_passes_test(is_librarian)
+def librarian_dasboard(request):
+   return HttpResponse("Welcome, Librarian! This is the librarian view.")
+
+
+
+def is_member(user):
+   return hasattr(user, 'profile') and user.profile.role == "member"
+
+@user_passes_test(is_member)
+def member_dashboard(request):
+   return HttpResponse("Welcome, Member! This is the member view.")
+
