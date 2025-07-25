@@ -24,4 +24,3 @@ class CustomUserAdmin(BaseUserAdmin):
 
     model = CustomUser
 
-admin.site.register(CustomUser, CustomUserAdmin)
