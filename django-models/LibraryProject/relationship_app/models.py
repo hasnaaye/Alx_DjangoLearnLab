@@ -39,7 +39,7 @@ class UserProfile(models.Model):
         ('Member', 'Member')
     ]
 
-    user = models.OneToOneField(on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(on_delete=models.CASCADE, related_name="userprofile")
     role = models.CharField(max_length=100, choices=ROLE_CHOICES)
     
     def __str__(self):
