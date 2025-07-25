@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Book  # make sure you have a Book model defined
+from .models import Book  
 
 
 @login_required(raise_exception=True)
