@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Book
+from .models import CustomUser, CustomUserAdmin
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -8,6 +9,7 @@ class BookAdmin(admin.ModelAdmin):
     search_fields = ('title', 'author')
 
 admin.site.register(Book)
+admin.site.register(CustomUser, CustomUserAdmin)
 
 # Register your models here.
 
