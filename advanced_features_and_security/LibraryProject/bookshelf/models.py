@@ -9,6 +9,13 @@ class Book(models.Model):
         author = models.CharField(max_length=200)
         publication_year = models.IntegerField()
 
+        permissions = [
+            ("can_view, can_view",
+             "can_create, can_create",
+             "can_edit, can_edit",
+             "can_delete, can_delete"),
+        ]
+
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
