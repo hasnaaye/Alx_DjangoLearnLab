@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Book
 from .models import Library
 from django.views.generic.detail import DetailView
@@ -8,7 +8,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponse
+from django.contrib.auth.decorators import permission_required
+from django import BookForm
+
 
 def book_list(request):
       """Retrieves all books and renders a template displaying the list."""
@@ -55,7 +57,7 @@ def Admin(request):
 
 
 def is_librarian(user):
-   return hasattr(user, 'profile') and user.profile.role == "librarian"
+   return hasattr(user, 'userprofile') and user.profile.role == "Librarian"
 
 @user_passes_test(is_librarian)
 def Librarian(request):
@@ -64,9 +66,20 @@ def Librarian(request):
 
 
 def is_member(user):
-   return hasattr(user, 'profile') and user.profile.role == "member"
+   return hasattr(user, 'userprofile') and user.profile.role == "Member"
 
 @user_passes_test(is_member)
 def Member(request):
    return render(request, 'relationship_app/member_view.html')
 
+
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+   if request.method == 'POST':
+      form = BookForm(request.POST)
+      if form.is_valid():
+         form.save()
+         return redirect('list-books')
+   else:
+      form = BookForm()
+   return render(request, 'relationship_app/add_book.html', {'form': form})
