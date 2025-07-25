@@ -83,3 +83,25 @@ def add_book(request):
    else:
       form = BookForm()
    return render(request, 'relationship_app/add_book.html', {'form': form})
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def add_book(request):
+   if request.method == 'POST':
+      form = BookForm(request.POST)
+      if form.is_valid():
+         form.save()
+         return redirect('list-books')
+   else:
+      form = BookForm()
+   return render(request, 'relationship_app/change_book.html', {'form': form})
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def add_book(request):
+   if request.method == 'POST':
+      form = BookForm(request.POST)
+      if form.is_valid():
+         form.save()
+         return redirect('list-books')
+   else:
+      form = BookForm()
+   return render(request, 'relationship_app/delete_book.html', {'form': form})
