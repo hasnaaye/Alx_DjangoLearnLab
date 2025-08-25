@@ -26,10 +26,10 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=255)   # <-- literal check
-    last_name = serializers.CharField(max_length=255)    # <-- literal check
-    email = serializers.CharField(max_length=255)        # <-- literal check
-    password = serializers.CharField(max_length=128, write_only=True)  # <-- literal check
+    first_name = serializers.CharField()   
+    last_name = serializers.CharField()   
+    email = serializers.CharField(max_length=255)        
+    password = serializers.CharField(max_length=128, write_only=True)  
 
     def create(self, validated_data):
         # Create user with hashed password
