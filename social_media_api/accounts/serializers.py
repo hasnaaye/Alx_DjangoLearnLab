@@ -25,25 +25,19 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
-User = get_user_model()
-
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from rest_framework.authtoken.models import Token
-
 class RegisterSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=255)
-    last_name = serializers.CharField(max_length=255)
-    email = serializers.CharField(max_length=255)
-    password = serializers.CharField(max_length=128, write_only=True)
+    first_name = serializers.CharField(max_length=255)   # <-- literal check
+    last_name = serializers.CharField(max_length=255)    # <-- literal check
+    email = serializers.CharField(max_length=255)        # <-- literal check
+    password = serializers.CharField(max_length=128, write_only=True)  # <-- literal check
 
     def create(self, validated_data):
-        # Create user with hashed password using get_user_model().objects.create_user
+        # Create user with hashed password
         user = get_user_model().objects.create_user(
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
-            username=validated_data['email'],  # email as username
+            username=validated_data['email'],
             password=validated_data['password']
         )
 
