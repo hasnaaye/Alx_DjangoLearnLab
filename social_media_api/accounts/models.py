@@ -8,3 +8,4 @@ class Token(models.Model):
 
     def __str__(self):
         return self.bio[:30] 
+
