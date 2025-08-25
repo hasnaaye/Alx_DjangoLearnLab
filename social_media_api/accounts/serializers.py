@@ -23,6 +23,12 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
+
+User = get_user_model()
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128, write_only=True)
 
@@ -31,14 +37,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'email', 'password']
 
     def create(self, validated_data):
-        user = User(
+        # Create user with proper password hashing
+        user = User.objects.create_user(
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
             username=validated_data['email'],  # use email as username
+            password=validated_data['password']
         )
-        user.set_password(validated_data['password'])
-        user.save()
+
+        # Create a token for the new user
+        Token.objects.create(user=user)
+
         return user
+
 
 
