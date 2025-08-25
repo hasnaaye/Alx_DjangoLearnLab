@@ -27,31 +27,27 @@ class LoginSerializer(serializers.Serializer):
 
 User = get_user_model()
 
-class RegisterSerializer(serializers.ModelSerializer):
-    # Input fields
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
+
+class RegisterSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
-    email = serializers.EmailField(max_length=255)
+    email = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'password']
-
     def create(self, validated_data):
-        # Create user with hashed password
-        user = User.objects.create_user(
+        # Create user with hashed password using get_user_model().objects.create_user
+        user = get_user_model().objects.create_user(
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             email=validated_data['email'],
-            username=validated_data['email'],  # using email as username
+            username=validated_data['email'],  # email as username
             password=validated_data['password']
         )
 
-        # Generate a DRF auth token for the new user
+        # Create a DRF token for the new user
         Token.objects.create(user=user)
 
         return user
-
-
-
